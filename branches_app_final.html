@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.0.6/dist/MarkerCluster.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.0.6/dist/MarkerCluster.Default.css">
+<title>Jollibee » Metro Manila Branches</title>
+<style>
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+#map {
+  height: 100%;
+  font-family: Roboto, Helvetica, sans-serif;
+}
+
+</style>
+</head>
+<body>
+<div id="map"></div>
+<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.0.6/dist/leaflet.markercluster.js"></script>
+<script src="data/jollibee.js"></script>
+<script>
+'use strict';
+
+let map = L.map('map').setView([14.57, 121.03], 11);;
+L.tileLayer(
+  'https://cartodb-basemaps-{s}.global.ssl.fastly.net/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png',
+  {
+    attribution : 'Base map &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a> (data), <a href="https://carto.com/">CARTO</a> (style)',
+    maxZoom     : 19,
+  },
+).addTo(map);
+
+let cluster = new L.markerClusterGroup();
+
+L.geoJson(
+  jollibeeData,
+  {
+    pointToLayer: function(feature, latlng) {
+      let marker = L.marker([latlng.lat, latlng.lng]);
+      let content = '<table>';
+      Object.keys(feature.properties).forEach(key => {
+        content += `<tr><td><b>${key}</b></td>`;
+        content += `<td>${feature.properties[key]}</td></tr>`;
+      });
+      content += '</table>';
+      marker.bindPopup(content);
+      cluster.addLayer(marker);
+      return marker;
+    }
+  },
+);
+
+map.addLayer(cluster);
+
+</script>
+</body>
+</html>

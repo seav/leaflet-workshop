@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css">
+<title>UP Resilience Institute » Locator Map</title>
+<style>
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+#map {
+  height: 100%;
+  font-family: Roboto, Helvetica, sans-serif;
+}
+
+.leaflet-popup-content strong {
+  font-size: 14px;
+  color: #C00;
+  text-transform: uppercase;
+}
+
+.leaflet-popup-content h1 {
+  margin: 0 0 10px 0;
+  font-size: 24px;
+  line-height: 28px;
+}
+
+.leaflet-popup-content dl {
+  margin: 0;
+}
+
+.leaflet-popup-content dt {
+  margin: 0 0 5px;
+  font-size: 12px;
+  width: 80px;
+  float: left;
+  clear: left;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.leaflet-popup-content dd {
+  margin: 0 0 5px;
+  padding-left: 90px;
+}
+
+</style>
+</head>
+<body>
+<div id="map"></div>
+<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"></script>
+<script>
+'use strict';
+
+let map = L.map('map');
+
+let baseMap1 = L.tileLayer(
+  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  {
+    attribution : 'Base map &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
+    maxZoom     : 19,
+  },
+).addTo(map);
+
+let baseMap2 = L.tileLayer(
+  'https://cartodb-basemaps-{s}.global.ssl.fastly.net/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png',
+  {
+    attribution : 'Base map &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a> (data), <a href="https://carto.com/">CARTO</a> (style)',
+    maxZoom     : 19,
+  },
+);
+
+let marker = L.marker([14.6479957, 121.0692058]);
+marker.bindPopup(
+  '<strong>University of the Philippines</strong>' +
+  '<h1>Resilience Institute</h1>' +
+  '<dl><dt>Address</dt><dd>National Institute of Geological Sciences, ' +
+  'College of Science, University of the Philippines,' +
+  'Velasquez Street, Diliman, Quezon City 1101</dd>' +
+  '<dt>Telephone</dt><dd>+63-2-9242904</dd>' +
+  '<dt>Email</dt><dd>resilience.institute@up.edu.ph</dd>' +
+  '<dt>Website</dt><dd>https://resilience.up.edu.ph/</dd>'
+);
+
+let buildingOutline = L.polygon(
+  [
+    [
+      [14.6481922, 121.0691480],
+      [14.6477661, 121.0691468],
+      [14.6477656, 121.0693365],
+      [14.6476222, 121.0693361],
+      [14.6476216, 121.0695883],
+      [14.6477587, 121.0695887],
+      [14.6477582, 121.0698019],
+      [14.6478592, 121.0698022],
+      [14.6478594, 121.0697273],
+      [14.6478857, 121.0697274],
+      [14.6478855, 121.0698051],
+      [14.6480721, 121.0698056],
+      [14.6480723, 121.0697293],
+      [14.6481013, 121.0697294],
+      [14.6481011, 121.0698060],
+      [14.6481831, 121.0698062],
+      [14.6481833, 121.0697303],
+      [14.6482341, 121.0697304],
+      [14.6482340, 121.0697751],
+      [14.6483973, 121.0697755],
+      [14.6483978, 121.0696004],
+      [14.6482617, 121.0696000],
+      [14.6482618, 121.0695778],
+      [14.6483267, 121.0695780],
+      [14.6483270, 121.0694607],
+      [14.6483273, 121.0693434],
+      [14.6482580, 121.0693432],
+      [14.6482581, 121.0693256],
+      [14.6484044, 121.0693260],
+      [14.6484049, 121.0691575],
+      [14.6482434, 121.0691570],
+      [14.6482434, 121.0691825],
+      [14.6481921, 121.0691824],
+    ],
+    [
+      [14.6477630, 121.0695676],
+      [14.6477630, 121.0693652],
+      [14.6481476, 121.0693652],
+      [14.6481475, 121.0695676],
+      [14.6477630, 121.0695676],
+    ],
+  ],
+);
+map.fitBounds(buildingOutline.getBounds());
+
+var overlays = L.layerGroup([marker, buildingOutline]).addTo(map);
+
+var baseMaps = {
+  'OpenStreetMap Carto' : baseMap1,
+  'CARTO Voyager'       : baseMap2,
+};
+
+var overlayMaps = {
+  'Locator': overlays
+};
+
+L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+</script>
+</body>
+</html>
